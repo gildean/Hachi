@@ -1,0 +1,22 @@
+extends index
+block content
+  #bg
+  #main
+    h1#pagetitle Hachi
+      span.tooltip
+        a(href="http://julkinen.salaliitto.com/") by: 
+          span ok 2012
+    #nav.hidden(style="display: none")
+      span#navstatus(style="display: none")
+      button#autorefresh.actionbutton autorefresh
+      button#refreshall.actionbutton refresh view
+      button#addbutton.actionbutton new app
+      button#setbutton.actionbutton settings
+    #statusmessage
+    #refreshstatus
+    ul#drones(style="display: none")
+    #settings
+      ul#users users
+    #adduser
+    #addapp
+    #dronestatus

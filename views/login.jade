@@ -1,0 +1,11 @@
+extends index
+block content
+  #bg
+  #main
+    h1#pagetitle login
+    form#login(name="login", method="post", action="/login")
+      input.textinput(name="username", type="text", required)
+      input.textinput(name="password", type="password", required)
+      input.button(type="submit", value="login")
+  script(src="/js/jquery.js")
+  script(src="/js/queries.js")

@@ -1,0 +1,11 @@
+extends index
+block content
+  #bg
+  #main
+    h1#pagetitle error
+    #nav
+      #statusmessage
+        if (error === 'loginerror')
+          p Incorrect login
+        else
+          p= error
