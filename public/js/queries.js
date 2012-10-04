@@ -1,24 +1,3 @@
-
-$(function () {
-	var main = $('#main'),
-		bg = $('#bg'),
-	    status = $('#statusmessage'),
-	    drones = $('#drones'),
-	    dronelist = $('li.drone'),
-	    navi = $('#nav'),
-	    navistatus = $('#navstatus'),
-	    dronestatus = $('#dronestatus'),	    
-	    settings = $('#settings'),
-	    refreshall = $('#refreshall'),
-	    auto = $('#autorefresh'),	    
-	    refreshstatus = $('#refreshstatus'),
-	    addbutton = $('#addbutton'),
-	    adduser = $('#adduser'),
-	    setbutton = $('#setbutton'),
-	    users = $("#users"),
-	    getTime = Date.now(),
-	    autorefresh = false;
-	
 	function droneJson(drone) {
 		var dronestatus = $('#dronestatus'),
 	    	navtitle = $('#navtitle'),
@@ -90,6 +69,35 @@ $(function () {
 		});
 	};
 
+	
+$(function () {
+	var main = $('#main'),
+		bg = $('#bg'),
+	    status = $('#statusmessage'),
+	    drones = $('#drones'),
+	    dronelist = $('li.drone'),
+	    navi = $('#nav'),
+	    navistatus = $('#navstatus'),
+	    dronestatus = $('#dronestatus'),	    
+	    settings = $('#settings'),
+	    refreshall = $('#refreshall'),
+	    auto = $('#autorefresh'),	    
+	    refreshstatus = $('#refreshstatus'),
+	    addbutton = $('#addbutton'),
+	    adduser = $('#adduser'),
+	    setbutton = $('#setbutton'),
+	    users = $("#users"),
+	    getTime = Date.now(),
+	    autorefresh = false;
+
+	loadDrones();
+	statusCheckTime(Date.now());
+	drones.sortable();
+	drones.disableSelection();
+	drones.fadeIn(1000);
+	navi.fadeIn(500);
+	refreshstatus.hide();
+
 	function statusCheckTime (time) {
 		navistatus.text('last checked: ' + moment(time).fromNow()).fadeIn(500, function() {
 			$(this).delay(7000).fadeOut(1500, function () {
@@ -97,7 +105,7 @@ $(function () {
 			});
 		});
 	};
-
+	
 	function loadDrones() {
 			drones.html('').fadeIn(500);
 		    $.getJSON('/drones', function (jsondata) {
@@ -149,14 +157,6 @@ $(function () {
 		    });
 		});
 	};
-
-	loadDrones();
-	statusCheckTime(Date.now());
-	drones.sortable();
-	drones.disableSelection();
-	drones.fadeIn(1000);
-	navi.fadeIn(500);
-	refreshstatus.hide();
 
 	status.text('Loading').fadeOut(1000, function () {
 		$(this).text('');
@@ -288,4 +288,5 @@ $(function () {
 			}, 30000);
 		}
 	}, 60000);
+
 });
