@@ -8,8 +8,8 @@ var dbinfo = require('./dbinfo'),
 // check that the user doesn't already exist and then create it with a randomly salted password hash
 function addNewUser (req, res) {
     if (req.body.password !== req.body.passwordconf) {
-        console.log('Password mismatch error');
-        res.send(409, 'Password mismatch!');
+        res.status(409);
+        res.render('error', { error: 'Password mismatch!'});
     } else {
         var values = {
             user: req.body.username,
@@ -24,7 +24,7 @@ function addNewUser (req, res) {
                 res.status(err.status || 500);
                 res.render('error', { error: err });
             } else {
-                res.send(200, 'OK');
+                res.render('login');
             }
         });
     }
@@ -34,7 +34,7 @@ function addNewUser (req, res) {
 
 // logon with bcrypt hash check
 function logon (req, res) {
-    userdb.findOne({ user : req.body.username },
+    userdb.findOne({ user : req.body.username.toString() },
         function(err, useraccount) {
             var password, passhash;
             if (!err && useraccount) {
@@ -43,7 +43,7 @@ function logon (req, res) {
                 bcrypt.compare(password, passhash, function(err, same) {
                     if (!err && same) {
                         req.session.user = useraccount;
-                        res.render('list');
+                        res.redirect('/');
                     } else if (err) {                  
                         res.status(err.status || 500);
                         res.render('error', { error: err });
@@ -55,7 +55,6 @@ function logon (req, res) {
             } else if (err) {                        
                 res.status(err.status || 500);
                 res.render('error', { error: err });
-
             } else {                        
                 res.status(401);
                 res.render('error', { error: 'loginerror' });
@@ -66,27 +65,29 @@ function logon (req, res) {
 
 // export a function to be used as an entrypoint to the middleware
 module.exports = function (req, res, next) {
-    if (req.session.user) {
+    if (req.url === '/users' && req.session.user.rw) {
+        userdb.find(function (err, users) {
+            if (!err && users) {
+                res.send(200, users);
+            } else {
+                res.send(500, err || 'Something went wrong.');
+            } 
+        });
+    } else if (req.session.user) {
         next();
     } else {
         userdb.count(function(err, users) {
             if (err) {
                 res.status(err.status || 500);
                 res.render('error', { error: err });
-            } else if (users === 0 && req.body.username) {
-                addNewUser(req, res);
             } else if (users === 0) {
-                res.render('users');
+                if (req.body.username && req.body.password && req.body.passwordconf) {
+                    addNewUser(req, res);
+                } else {
+                    res.render('adduser');
+                }
             } else if (req.body.username) {
                 logon(req, res);
-            } else if (req.url === '/users' && req.session.user.rw) {
-                userdb.find(function (err, users) {
-                    if (!err && users) {
-                        res.send(200, users);
-                    } else {
-                        res.render('error', {error: err || 'Something went wrong.'});
-                    } 
-                });
             } else {
                 res.render('login');
             }

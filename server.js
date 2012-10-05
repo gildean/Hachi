@@ -14,6 +14,7 @@ app.use(express.bodyParser());
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.cookieParser('CaiR0nCult41nenCuning45'));
+app.locals.pretty = true;
 app.use(express.session({ store: new RedisStore }));
 
 app.get('/drones/:drone', userauth, actions.internalProxy);

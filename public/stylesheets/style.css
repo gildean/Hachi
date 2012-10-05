@@ -59,10 +59,10 @@ h2 {
 	border: 1px solid rgba(0,0,0,0.2);
 	padding: 10px 70px 10px 20px;
 	border-radius: 6px;
-	min-height: 220px;
+	min-height: 230px;
 	max-height: 100vh;
 	overflow: auto;
-	min-width: 175px;
+	min-width: 210px;
 	margin: 5px;
 	float: left;
 	color: #FFF;	
@@ -75,9 +75,6 @@ h2 {
 	background: -ms-linear-gradient(-45deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
 	background: linear-gradient(135deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#848484', endColorstr='#333333',GradientType=1 );
-}
-
-.ui-sortable {
 	cursor: move;
   	cursor: grab;
   	cursor: -moz-grab;
@@ -136,6 +133,13 @@ li p {
 .dronelink:hover {
 	cursor: pointer;	
 	color: #FF0054;	
+}
+
+#logo {
+	position: fixed;
+	left: 10px;
+	bottom: 5px;
+	z-index: 600;
 }
 
 #pagetitle {
@@ -268,8 +272,12 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 	float: right;
 }
 
+.dronebutton {
+	margin: 9px 0;
+}
+
 #nav {
-	z-index: 600;
+	z-index: 500;
 	height: 55px;
 	font-size: 0.9em;
 	position: fixed;
@@ -300,8 +308,8 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 }
 
 #drones {
-	width: 80%;
-	min-width: 200px;
+	width: 90%;
+	min-width: 360px;
 	overflow-y: auto;
 	text-shadow: -1px 1px 8px rgba(0,0,0,0.5), -1px -1px 2px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.8);
 }
@@ -324,22 +332,35 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 
 #refreshstatus {
 	position: fixed;
+	bottom: 55px;
+	right: 5px;
+	font-size: 0.8em;
+	color: rgba(255,255,255,0.3);
+}
+
+#logout {
+	position: fixed;
 	top: 5px;
 	right: 5px;
 	font-size: 0.8em;
-	color: rgba(255,255,255,0.8);
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 0.8em;
+	color: rgba(255,255,255,0.5);
 }
 
-#statusmessage {
+#statusmessage, #errormessage {
 	position: fixed;
 	width: 100%;
-	top: 40vh;
+	top: 30vh;
+	top: 15%;
 	min-width: 300px;
 	text-align: center;
 	font-size: 2em;
 	color: rgba(255,255,255,0.9);
 	text-shadow: -1px 1px 8px rgba(0,0,0,0.5), -1px -1px 2px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.8);
 }
+
 
 #statusmessage p {
 	padding: 0;

@@ -1,5 +1,8 @@
 var haibu = require('haibu'),
-    http = require('http');
+    http = require('http')
+    dbinfo = require('./dbinfo'),
+    db = require('mongojs').connect(dbinfo),
+    dronedb = db.collection('drones');
 
 exports.droneName = function (req, res, next, drone) {
     req.drone = drone.toString();
@@ -14,46 +17,69 @@ exports.actionName = function (req, res, next, action) {
 };
 
 exports.internalProxy = function (req, res) {
-    console.log('request for ' + req.url);
-    var client = new haibu.drone.Client({
-        host: 'localhost',
-        port: 9002
-    }), proxy, options;
+    var client = new haibu.drone.Client({ host: 'localhost', port: 9002 }), 
+        options,
+        proxy;
 
-    if (req.url === '/' || req.url === '/login') {
+    if (req.url === '/login') {
+        res.redirect('/');
+    } else if (req.url === '/') {
         res.render('list');
     } else if (req.url === '/logout') {
         req.session.destroy();
-        res.send(200, 'Logout ok');
+        res.render('login');
     } else if (req.drone && !req.droneaction) {
         client.get(req.drone, function (err, results) {
-            console.log(results);
-            res.send(200, results);
+            if (!err) {
+                console.log(results);
+                res.send(200, results);
+            } else {
+                res.send(err.status || 500, err || 'error!');
+            }
         });
     } else if (req.droneaction) {
         if (req.droneaction === 'stop') {
             client.stop(req.drone, function (err, results) {
-                console.log(results);
-                res.send(200, results);
+                if (!err) {
+                    console.log(results);
+                    res.send(200, results);
+                } else {
+                    res.send(err.status || 500, err || 'error!');
+                }
+            });
+        } else if (req.droneaction === 'start') {
+            client.start(req.drone, function (err, results) {
+                if (!err) {    
+                    console.log(results);
+                    res.send(200, results);
+                } else {
+                    res.send(err.status || 500, err || 'error!');
+                }
             });
         } else if (req.droneaction === 'restart') {
             client.restart(req.drone, function (err, results) {
-                console.log(results);
-                res.send(200, results);
+                if (!err) {    
+                    console.log(results);
+                    res.send(200, results);
+                } else {
+                    res.send(err.status || 500, err || 'error!');
+                }
             });
         } else if (req.droneaction === 'delete') {
             client.clean(req.drone, function (err, results) {
-            console.log(results);
-                console.log(results);
-                res.send(200, results);
+                if (!err) {
+                    console.log(results);
+                    res.send(200, results);
+                } else {
+                    res.send(err.status || 500, err || 'error!');
+                }
             });
         }
     } else if (req.url === '/drones') {
         options = {
             host: 'localhost',
         	port: 9002,
-        	path: req.url,
-        	method: req.method
+        	path: req.url
         };
         proxy = http.request(options, function (proxyres) {
     		proxyres.pipe(res);

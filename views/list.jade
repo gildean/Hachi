@@ -2,6 +2,7 @@ extends index
 block content
   #bg
   #main
+    img#logo(src="/logo.png")
     h1#pagetitle Hachi
       span.tooltip
         a(href="http://julkinen.salaliitto.com/") by: 
@@ -14,9 +15,12 @@ block content
       button#setbutton.actionbutton settings
     #statusmessage
     #refreshstatus
+    a#logout(href="/logout") logout
     ul#drones(style="display: none")
     #settings
-      ul#users users
+      ul#users
     #adduser
+      form(id="adduserform", action="/adduser")
     #addapp
+      p something here
     #dronestatus
