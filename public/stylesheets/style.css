@@ -13,7 +13,7 @@
 	left: 0;
 	right: 0;background: rgb(0,206,168);
 	background: #0e0e0e;
-	background: url('./illusion.png') repeat;
+	background: url('./images/illusion.png') repeat;
 }
 
 #main {
@@ -66,19 +66,12 @@ h2 {
 	margin: 5px;
 	float: left;
 	color: #FFF;	
-	background: rgb(132,132,132);
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjODQ4NDg0IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMzMzMzMyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
-	background: -moz-linear-gradient(-45deg, rgba(132,132,132,1) 0%, rgba(51,51,51,1) 100%);
-	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(132,132,132,1)), color-stop(100%,rgba(51,51,51,1)));
-	background: -webkit-linear-gradient(-45deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
-	background: -o-linear-gradient(-45deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
-	background: -ms-linear-gradient(-45deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
-	background: linear-gradient(135deg, rgba(132,132,132,1) 0%,rgba(51,51,51,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#848484', endColorstr='#333333',GradientType=1 );
+	background: #2B2B2B;
 	cursor: move;
   	cursor: grab;
   	cursor: -moz-grab;
   	cursor: -webkit-grab;
+  	box-shadow: 2px 2px 8px rgba(0,0,0,0.3), inset 0 0 2px rgb(238,0,110);
 }
 
 .grabbing {
@@ -111,7 +104,7 @@ li p {
 	padding: 5px;
 	left: 10px;
 	font-size: 0.9em;
-	color: #4CFF00;
+	color: #EE006E;
 }
 
 .dronecount:hover {
@@ -132,7 +125,7 @@ li p {
 
 .dronelink:hover {
 	cursor: pointer;	
-	color: #FF0054;	
+	color: #EE006E;	
 }
 
 #logo {
@@ -161,8 +154,8 @@ li p {
 }
 
 #pagetitle:hover {
-	color: #FF0054;
-	text-shadow: -2px 2px 3px rgba(0,0,0,0.5), -1px 1px 1px rgba(0,0,0,0.5);
+	color: #EE006E;
+	text-shadow: -2px 2px 3px rgba(0,0,0,0.5), -1px 1px 1px rgba(0,0,0,0.5), 0 0 4px rgba(0,0,0,0.7);
 	cursor: crosshair;
 }
 
@@ -177,12 +170,12 @@ span.tooltip {
     padding: 10px;
     font-size: 0.9em;
     text-align: center;
-    color: #FFF;
-    background: rgba(0,0,0,0.5);
+    color: #FCFCFC;
+    background: rgba(0,0,0,0.8);
     border: 1px solid rgba(0,0,0,0.2);
     border-radius: 5px;
-    text-shadow: rgba(0, 0, 0, 0.2) 1px 1px 1px;
-    box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 2px 0px;      
+    text-shadow:  1px 1px 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4), inset 0 0 2px #EE006E;      
 	transition: all 0.2s ease-in-out;
 	-o-transition: all 0.2s ease-in-out;
 	-webkit-transition: all 0.2s ease-in-out;
@@ -205,7 +198,7 @@ span.dronetooltip {
       border: 0;
       border-radius: 3.2px 0px 0px 3.2px;
       text-shadow: rgba(0, 0, 0, 0.6) 1px 1px 1px;
-      box-shadow: rgba(242, 2, 102, 0.2) 4px 0px 4px 0px inset;
+      box-shadow:  inset 4px 0px 4px rgba(238, 0, 110, 0.2);
 }
 
 span.dronetooltip:after {
@@ -239,7 +232,7 @@ h1 > .tooltip a {
 }
 
 .tooltip a > span {
-	color: #FF0054;
+	color: #EE006E;
 }
 
 div > .tooltip, h1 > .tooltip, button .dronetooltip {
@@ -260,7 +253,7 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 
 .asidecontrol {
 	position: absolute;
-	top: 20px;
+	top: 15px;
 	right: 10px;
 	width: 50px;
 	font-size: 0.8em;
@@ -273,7 +266,8 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 }
 
 .dronebutton {
-	margin: 9px 0;
+	padding: 4px 20px;
+	margin: 7px 0;
 }
 
 #nav {
@@ -297,8 +291,10 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 }
 
 #navstatus {
-	display: inline-block;
-	margin: 18px auto 0;
+	position: absolute;
+	margin: 18px 0 0;
+	width: 100%;
+	text-align: center;
 }
 
 #navstatus p {
@@ -308,6 +304,7 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 }
 
 #drones {
+	padding: 10px 10px 55px;
 	width: 90%;
 	min-width: 360px;
 	overflow-y: auto;
@@ -381,7 +378,7 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 	border-radius: 4px;
 	margin: 10px auto;
 	text-align: center;
-	color: #FF0054;
+	color: #EE006E;
 	text-shadow: -1px 1px 8px rgba(0,0,0,0.5), -1px -1px 1px rgba(0,0,0,0.7), 1px 1px 1px rgba(0,0,0,0.7);
 }
 
@@ -468,5 +465,5 @@ button {
 }
 
 .active {
-	box-shadow: inset 0 0 20px rgba(242, 2, 102, 0.8)
+	box-shadow: inset 0 0 25px rgb(238, 0, 110)
 }
