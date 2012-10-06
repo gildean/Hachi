@@ -39,7 +39,7 @@ body, html, #main {
 }
 
 h2 {
-	font: 220% Andalus, FreeSerif;
+	font: 220% Andalus, Palatino, serif;
 	text-align: center;	
 	text-shadow: -1px 1px 8px rgba(0,0,0,0.5), -1px -1px 2px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.8);
 	color: rgba(255,255,255,0.9);
@@ -47,9 +47,9 @@ h2 {
 }
 
 
-.ui-dialog-title h2 {
+.ui-dialog .ui-dialog-titlebar, .ui-dialog-title h2 {
 	margin: 0;
-	padding: 0;
+	padding: 0 20px;
 }
 
 .drone {
@@ -115,7 +115,7 @@ li p {
 	color: rgba(250,250,250,0.9);
 	line-height: 0.8em;
 	text-decoration: underline;
-	font: 180% Andalus, FreeSerif;
+	font: 180% Andalus, Palatino, serif;
 	text-decoration: none;
 	transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
@@ -136,17 +136,18 @@ li p {
 }
 
 #pagetitle {
-	font: 220% Andalus, FreeSerif;
-	font-weight: bold;
 	position: fixed;
 	left: 5px;
 	bottom: 0;
+	font: 220% Andalus, Palatino, serif;
+	text-decoration: none;
+	font-weight: bold;
 	color: #FFF;
 	text-shadow: -2px 2px 3px rgba(0,0,0,0.5), -1px 1px 1px rgba(0,0,0,0.5), 0 0 4px rgba(0,0,0,0.3);
 	margin: 0;
 	padding: 0;
 	border: 0;
-	z-index: 700;
+	z-index: 900;
 	transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
 	-webkit-transition: all 0.3s ease-in-out;
@@ -214,8 +215,9 @@ span.dronetooltip:after {
 }
 
 h1 > .tooltip {
-	top: -50px;
-	left: 0;
+	position: absolute;
+	top: 0px;
+	left: 95px;
 	text-shadow: -1px 1px 2px rgba(0,0,0,0.4);
 	width: 95px;
 }
@@ -225,7 +227,7 @@ h1 > .tooltip a {
 	top: 15px;
 	left: 15px;
 	color: #FFF;
-	font: 0.5em Andalus, FreeSerif;
+	font: 0.5em Andalus, Palatino, serif;
 	text-decoration: none;
 	line-height: 20px;
 	padding: 0;

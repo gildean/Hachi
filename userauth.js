@@ -6,7 +6,7 @@ var dbinfo = require('./dbinfo'),
 
 
 // check that the user doesn't already exist and then create it with a randomly salted password hash
-function addNewUser (req, res) {
+exports.addNewUser = function (req, res) {
     if (req.body.password !== req.body.passwordconf) {
         res.status(409);
         res.render('error', { error: 'Password mismatch!'});
@@ -24,7 +24,11 @@ function addNewUser (req, res) {
                 res.status(err.status || 500);
                 res.render('error', { error: err });
             } else {
-                res.render('login');
+                if (req.session.user) {
+                    res.send(200, 'User added!');
+                } else {
+                    res.render('login');
+                }
             }
         });
     }
@@ -63,17 +67,24 @@ function logon (req, res) {
     );
 };
 
+exports.getUsers = function (req, res) {
+    if (req.session.user.rw) {
+            userdb.find(function (err, users) {
+                if (!err && users) {
+                    res.send(200, users);
+                } else {
+                    res.send(500, err || 'Something went wrong.');
+                } 
+            });
+    } else {
+        res.send(401, 'Not ok!')
+    }
+};
+
 // export a function to be used as an entrypoint to the middleware
-module.exports = function (req, res, next) {
-    if (req.url === '/users' && req.session.user.rw) {
-        userdb.find(function (err, users) {
-            if (!err && users) {
-                res.send(200, users);
-            } else {
-                res.send(500, err || 'Something went wrong.');
-            } 
-        });
-    } else if (req.session.user) {
+
+exports.checkLogin = function (req, res, next) {
+    if (req.session.user) {
         next();
     } else {
         userdb.count(function(err, users) {

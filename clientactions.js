@@ -5,9 +5,14 @@ var haibu = require('haibu'),
     dronedb = db.collection('drones');
 
 exports.droneName = function (req, res, next, drone) {
-    req.drone = drone.toString();
-    console.log(req.drone);
-    next();
+    console.log(drone);
+    if (drone !== '/') {
+        req.drone = drone.toString();
+        console.log(req.drone);
+        next();
+    } else {
+        next();
+    }
 };
 
 exports.actionName = function (req, res, next, action) {
@@ -20,18 +25,14 @@ exports.internalProxy = function (req, res) {
     var client = new haibu.drone.Client({ host: 'localhost', port: 9002 }), 
         options,
         proxy;
-
+    res.locals.user = req.session.user;
     if (req.url === '/login') {
         res.redirect('/');
     } else if (req.url === '/') {
         res.render('list');
-    } else if (req.url === '/logout') {
-        req.session.destroy();
-        res.render('login');
     } else if (req.drone && !req.droneaction) {
         client.get(req.drone, function (err, results) {
             if (!err) {
-                console.log(results);
                 res.send(200, results);
             } else {
                 res.send(err.status || 500, err || 'error!');
@@ -41,7 +42,6 @@ exports.internalProxy = function (req, res) {
         if (req.droneaction === 'stop') {
             client.stop(req.drone, function (err, results) {
                 if (!err) {
-                    console.log(results);
                     res.send(200, results);
                 } else {
                     res.send(err.status || 500, err || 'error!');
@@ -49,8 +49,7 @@ exports.internalProxy = function (req, res) {
             });
         } else if (req.droneaction === 'start') {
             client.start(req.drone, function (err, results) {
-                if (!err) {    
-                    console.log(results);
+                if (!err) {
                     res.send(200, results);
                 } else {
                     res.send(err.status || 500, err || 'error!');
@@ -58,8 +57,7 @@ exports.internalProxy = function (req, res) {
             });
         } else if (req.droneaction === 'restart') {
             client.restart(req.drone, function (err, results) {
-                if (!err) {    
-                    console.log(results);
+                if (!err) {
                     res.send(200, results);
                 } else {
                     res.send(err.status || 500, err || 'error!');
@@ -68,22 +66,23 @@ exports.internalProxy = function (req, res) {
         } else if (req.droneaction === 'delete') {
             client.clean(req.drone, function (err, results) {
                 if (!err) {
-                    console.log(results);
                     res.send(200, results);
                 } else {
                     res.send(err.status || 500, err || 'error!');
                 }
             });
         }
-    } else if (req.url === '/drones') {
-        options = {
-            host: 'localhost',
-        	port: 9002,
-        	path: req.url
-        };
-        proxy = http.request(options, function (proxyres) {
-    		proxyres.pipe(res);
-    	});
-        req.pipe(proxy);
-    }
+    } 
+};
+
+exports.allDrones = function (req, res) {
+    options = {
+        host: 'localhost',
+        port: 9002,
+        path: req.url
+    };
+    proxy = http.request(options, function (proxyres) {
+        proxyres.pipe(res);
+    });
+    req.pipe(proxy);
 };

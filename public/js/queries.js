@@ -24,12 +24,13 @@ $(function () {
 
     // Function to get drone details to the dialog
     var droneJson = function (drone) {
-        var jsonDrone,
+        var dialogTitle = $('#ui-dialog-title-dronestatus'),
+            jsonDrone,
             droneHtml = '',
             i;
         dronestatus.dialog("open");
-        $('#ui-dialog-title-dronestatus').html('<h2 id="navtitle">' + drone + '</h2>');
-        $.getJSON('/drones/' + drone, function (jsondata) {
+        dialogTitle.html('<h2 id="navtitle">' + drone + '</h2>');
+        $.getJSON('/drone/' + drone, function (jsondata) {
             for (i = 0; i < jsondata.drones.length; i += 1) {
                 jsonDrone = jsondata.drones[i];
                 droneHtml += '<ul><p>Drone # ' + (i + 1) + '</p>'
@@ -70,7 +71,7 @@ $(function () {
     //This is the main action function that relays the commands to the backend
     var doDrone = function (drone, action) {
         var i, port;
-        $.post('/drones/' + drone + '/' + action + '/', JSON.stringify({ action : { "name" : drone }}), function (res) {
+        $.post('/drone/' + drone + '/' + action + '/', JSON.stringify({ action : { "name" : drone }}), function (res) {
             navistatus.fadeOut(300).delay(300).text('')
             for (i = 0; i < res.length; i += 1) {
                 if (res[i].port) {
