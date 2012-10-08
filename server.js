@@ -14,11 +14,12 @@ app.configure(function () {
     app.use(express.static(__dirname + '/public'));
     app.set('view engine', 'jade');
     app.set('views', __dirname + '/views');
+    app.use(express.favicon());
     app.use(express.bodyParser());
     app.use(express.cookieParser('CaiR0nCult41nenCuning45'));
     app.use(express.session({ store: new RedisStore }));
-    app.use(app.router);
     app.use(express.csrf());
+    app.use(app.router);
     app.locals.pretty = true;
     app.locals.errors = {};
     app.locals.messages = {};
@@ -28,18 +29,18 @@ app.configure(function () {
     });
 });
 
-app.get('/drones*', userauth.checkLogin, actions.allDrones);
+app.get('/drones', userauth.checkLogin, actions.allDrones);
 app.get('/drone/:drone', userauth.checkLogin, actions.internalProxy);
-app.get('/users*', userauth.checkLogin, userauth.getUsers);
+app.get('/users', userauth.checkLogin, userauth.getUsers);
 app.get('/logout', function (req, res) {
     req.session.destroy();
-    res.render('login');
+    res.send(200, 'Logout OK');
 });
-app.get('/*', userauth.checkLogin, csrf, actions.internalProxy);
+app.get('/*', csrf, userauth.checkLogin, actions.internalProxy);
 
-app.post('/adduser', userauth.checkLogin, userauth.addNewUser);
-app.post('/drone/:drone/:action', userauth.checkLogin, actions.internalProxy);
-app.post('/*', userauth.checkLogin, actions.internalProxy);
+app.post('/adduser', csrf, userauth.checkLogin, userauth.addNewUser);
+app.post('/drone/:drone/:action', csrf, userauth.checkLogin, actions.internalProxy);
+app.post('/*', csrf, userauth.checkLogin, actions.internalProxy);
 
 app.param('drone', actions.droneName);
 app.param('action', actions.actionName);

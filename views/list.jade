@@ -13,6 +13,7 @@ block content
       button#refreshall.actionbutton refresh view
       button#addbutton.actionbutton new app
       button#setbutton.actionbutton settings
+      button#sortembutton.actionbutton sort or drag
     #statusmessage
     #refreshstatus
     a#logout(href="/logout") logout
@@ -20,7 +21,22 @@ block content
     #settings
       ul#users
     #adduser
-      form(id="adduserform", action="/adduser")
-    #addapp
-      p something here
+      form(id="adduserform", action="/adduser", method="post")
+    #addapp(style="display: none")
+      form(id="adduserform", action="/addapp", method="post")
+        label(for="name") App name
+        input(type="text", name="name", id="newappname")
+        label(for="domain") App Domainname
+        input(type="text", name="domain", id="newappdomain")
+        label(for="repo") Repo Type
+        select(name="repo", id="newapprepo")
+          option(value="git", selected) git
+          option(value="local") local
+          option(value="tar") tar
+          option(value="zip") zip
+        label(for="location") Repo Location
+        input(type="text", name="location", id="newapplocation")
+        label(for="scripts") Startup Scripts
+        input(type="text", name="scripts", id="newappscripts")
+        input(type="hidden", name="_csrf", id="csrf", value="#{token}")
     #dronestatus

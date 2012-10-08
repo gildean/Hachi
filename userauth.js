@@ -1,4 +1,3 @@
-
 var dbinfo = require('./dbinfo'),
     db = require('mongojs').connect(dbinfo),
     userdb = db.collection('user'),
@@ -7,31 +6,39 @@ var dbinfo = require('./dbinfo'),
 
 // check that the user doesn't already exist and then create it with a randomly salted password hash
 exports.addNewUser = function (req, res) {
-    if (req.body.password !== req.body.passwordconf) {
-        res.status(409);
-        res.render('error', { error: 'Password mismatch!'});
-    } else {
-        var values = {
-            user: req.body.username,
-            pass: bcrypt.hashSync(req.body.password, 8),
-            rw: req.body.rw,
-            lastlogin: {
-                time: new Date()
-            }
-        };
-        userdb.insert(values, function(err) {
-            if (err) {
-                res.status(err.status || 500);
-                res.render('error', { error: err });
-            } else {
-                if (req.session.user) {
-                    res.send(200, 'User added!');
-                } else {
-                    res.render('login');
+    userdb.findOne({ name: req.body.username }, function (err, user) {
+        if (err) {
+            res.status(500);
+            res.render('error', { error: 'Database error!' });
+        } else if (user) {
+            res.status(409);
+            res.render('error', { error: 'User already exists!' });
+        } else if (req.body.password !== req.body.passwordconf) {
+            res.status(409);
+            res.render('error', { error: 'Password mismatch!' });
+        } else {
+            var values = {
+                user: req.body.username,
+                pass: bcrypt.hashSync(req.body.password, 8),
+                rw: req.body.rw,
+                lastlogin: {
+                    time: new Date()
                 }
-            }
-        });
-    }
+            };
+            userdb.insert(values, function(err) {
+                if (err) {
+                    res.status(err.status || 500);
+                    res.render('error', { error: err });
+                } else {
+                    if (req.session.user) {
+                        res.send(200, 'User added!');
+                    } else {
+                        res.render('login');
+                    }
+                }
+            });
+        }
+    })
 };
 
 

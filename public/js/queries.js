@@ -1,100 +1,106 @@
 $(function () {
     var main = $('#main'),
         bg = $('#bg'),
+        newappname = $('#newappname'),
+        newappdomain = $('#newappdomain'),
+        newapprepo = $('#newapprepo'),
+        newapplocation = $('#newapplocation'),
+        newappscripts = $('#newappscripts'),
+        newappform = $('#newappform'),
+        csrf = $('#csrf'),
         status = $('#statusmessage'),
         drones = $('#drones'),
         dronelist = $('li.drone'),
         dronebutton = $('.dronebutton'),
         navi = $('#nav'),
         navistatus = $('#navstatus'),
-        dronestatus = $('#dronestatus'),        
+        dronestatus = $('#dronestatus'),
         settings = $('#settings'),
         refreshall = $('#refreshall'),
-        auto = $('#autorefresh'),       
+        auto = $('#autorefresh'),
         refreshstatus = $('#refreshstatus'),
         addapp = $('#addapp'),
         addbutton = $('#addbutton'),
+        sortEm = $('#sortembutton'),
         adduser = $('#adduser'),
         navtitle = $('#navtitle'),
         buttonvalue = $('.controlbutton'),
         setbutton = $('#setbutton'),
         users = $('#users'),
         getTime = Date.now(),
-        autorefresh = false;
+        autorefresh = false,
+        dronesDrag = false;
+
 
     // Function to get drone details to the dialog
     var droneJson = function (drone) {
         var dialogTitle = $('#ui-dialog-title-dronestatus'),
-            jsonDrone,
+            drone = drone,
             droneHtml = '',
-            i;
-        dronestatus.dialog("open");
-        dialogTitle.html('<h2 id="navtitle">' + drone + '</h2>');
-        $.getJSON('/drone/' + drone, function (jsondata) {
-            for (i = 0; i < jsondata.drones.length; i += 1) {
-                jsonDrone = jsondata.drones[i];
-                droneHtml += '<ul><p>Drone # ' + (i + 1) + '</p>'
-                           + '<li>started: ' + moment(jsonDrone.ctime).format('DD/MM/YYYY - HH:mm') + '</li>'
-                           + '<li>running dir: ' + jsonDrone.cwd + '</li>'
-                           + '<li>env: ' + jsonDrone.env + '</li>'
-                           + '<li>forever pid: ' + jsonDrone.foreverPid + '</li>'
-                           + '<li>host: ' + jsonDrone.host + '</li>'
-                           + '<li>pid: ' + jsonDrone.pid + '</li>'
-                           + '<li>PORT: ' + jsonDrone.port + '</li></ul>';
-                if (jsondata.drones.length > 1) {
-                    droneHtml += '<hr>';
+            jsonDrone, i;
+        dronestatus.fadeOut(100, function() {
+            $(this).text('').toggleClass('hidden').dialog("open");
+            dialogTitle.html('<h2 id="navtitle">' + drone + '</h2>');
+            $.getJSON('/drone/' + drone, function (jsondata) {
+                for (i = 0; i < jsondata.drones.length; i += 1) {
+                    jsonDrone = jsondata.drones[i];
+                    droneHtml += '<ul><p>Drone # ' + (i + 1) + '</p>'
+                            + '<li>started: ' + moment(jsonDrone.ctime).format('DD/MM/YYYY - HH:mm') + '</li>'
+                            + '<li>running dir: ' + jsonDrone.cwd + '</li>'
+                            + '<li>env: ' + jsonDrone.env + '</li>'
+                            + '<li>forever pid: ' + jsonDrone.foreverPid + '</li>'
+                            + '<li>host: ' + jsonDrone.host + '</li>'
+                            + '<li>pid: ' + jsonDrone.pid + '</li>'
+                            + '<li>PORT: ' + jsonDrone.port + '</li></ul>';
+                    if (jsondata.drones.length > 1) {
+                        droneHtml += '<hr>';
+                    }
+                    if ((jsondata.drones.length - 1) === i) {
+                        dronestatus.append(droneHtml).fadeIn(300, function () {
+                            $(this).toggleClass('hidden');
+                        }); 
+                    }
                 }
-                if ((jsondata.drones.length - 1) === i) {
-                    dronestatus.append(droneHtml);
-                }
-            };
+            });
         });
     };
 
-    // a little helper function to smooth out the reloads of the dialog
-    var clickDrone = function (element) {
-        var drone = element;
-        if (dronestatus.hasClass('hidden')) {
-            droneJson(drone);
-            dronestatus.fadeIn(300, function () {
-                $(this).toggleClass('hidden');
-            });             
-        } else {
-            dronestatus.fadeOut(300, function() {
-                $(this).text('').toggleClass('hidden');
-                droneJson(drone);
-                $(this).fadeIn(300).toggleClass('hidden');
-            });
-        }
-    };
 
     //This is the main action function that relays the commands to the backend
     var doDrone = function (drone, action) {
         var i, port;
         $.post('/drone/' + drone + '/' + action + '/', JSON.stringify({ action : { "name" : drone }}), function (res) {
-            navistatus.fadeOut(300).delay(300).text('')
-            for (i = 0; i < res.length; i += 1) {
-                if (res[i].port) {
-                    port = res[i].port;
-                    navistatus.append('<p><span id="PORT' + port + '"> Drone OK on PORT: ' + port + ' </span></p>').fadeIn(500, function () {   
-                        $('#PORT' + port).fadeOut(5000, function() {
-                            $(this).parent().html('');
-                        });
+            if (action === 'stop') {
+                $('#' + drone).fadeOut(500, function () {
+                    $(this).remove();
+                    navistatus.fadeOut(300).delay(10).text('Drone ' + drone + ' stopped').fadeIn(300).delay(10000).fadeOut(3000, function () {
+                        $(this).text('');
                     });
-                    if (res[i].ctime) {
-                        $('#' + drone).find('.dronestarted').fadeOut(300, function () {
-                            $(this).text(moment(Date.now()).fromNow()).fadeIn(300);
+                });
+            }
+            navistatus.fadeOut(300, function () {
+                $(this).text('');
+                for (i = 0; i < res.length; i += 1) {
+                    if (res[i].port) {
+                        port = res[i].port;
+                        navistatus.append('<p><span id="PORT' + port + '"> Drone OK on PORT: ' + port + ' </span></p>').fadeIn(500, function () {   
+                            $('#PORT' + port).fadeOut(5000, function() {
+                                $(this).parent().html('');
+                            });
                         });
+                        if (res[i].ctime) {
+                            $('#' + drone).find('.dronestarted').fadeOut(300, function () {
+                                $(this).text(moment(Date.now()).fromNow()).fadeIn(300);
+                            });
+                        }
+                    } else {
+                        navistatus.fadeIn(200).append('<span>NOT OK!</span>').delay(10000).fadeOut(3000).text('');
                     }
-                } else {
-                    navistatus.fadeIn(200).append('<span>NOT OK!' + res[0] + '</span>').delay(10000).fadeOut(3000);
                 }
-            };
-            navistatus.fadeOut(5000, function() {
-                $(this).html('');
             });
         });
     };
+
 
     // One big function to rule them all (or to reload all the drones on the view, whichever you prefer)
     var loadDrones = function () {
@@ -102,20 +108,24 @@ $(function () {
         $.getJSON('/drones', function (jsondata) {
             getTime = Date.now();
             $.each(jsondata.drones, function (drone, data) {
-                var dronesHtml = '',
-                    droneCount = data.drones.length, i;
-                drones.append('<li style="display: none" class="drone" id="' + drone + '">'
-                            + '<a class="dronelink" href="#">' + drone + '</a>'
-                            + '<div class="dronecount" id="dc' + drone + '">' + droneCount 
-                            + '<span class="tooltip">Drones running</span></div></li>');
+                var droneCount = data.drones.length,
+                    droneButtons = '<button class="dronebutton" value="' + drone
+                                 + '">restart</button><button class="dronebutton" value="' + drone
+                                 + '">start</button><button class="dronebutton" value="' + drone
+                                 + '">stop</button><button class="dronebutton" value="' + drone
+                                 + '">delete</button>',
+                    droneItem = '<li style="display: none" class="drone" id="' + drone
+                            + '"><a class="dronelink" href="#">' + drone
+                            + '</a><div class="dronecount" id="dc' + drone
+                            + '">' + droneCount + '<span class="tooltip">Drones running</span></div></li>',
+                    dronesHtml = '',
+                    i;
+                drones.append(droneItem);
                 var droneEl = $('#' + drone);
                 droneEl.append('<aside class="asidecontrol" id="aside' + drone + '"></aside>')
-                    .find('#aside' + drone)
-                    .append('<button class="dronebutton" value="' + drone + '">restart</button>'
-                          + '<button class="dronebutton" value="' + drone + '">start</button>'
-                          + '<button class="dronebutton" value="' + drone + '">stop</button>'
-                          + '<button class="dronebutton" value="' + drone + '">delete</button>'
-                        ).find('button:first')
+                        .find('#aside' + drone)
+                        .append(droneButtons)
+                        .find('button:first')
                         .button({
                             icons: {
                                 primary: "ui-icon-arrowrefresh-1-e"
@@ -144,14 +154,22 @@ $(function () {
                                     + '<p><span class="key">PORT</span>: <span class="value">' + data.drones[i].port + '</span></p>'
                         if ((droneCount - 1 ) === i) {
                             droneEl.append(dronesHtml);
+                            checkIfDragOrSort();
+                            setTimeout(function () {
+                                statusCheckTime(Date.now());
+                            }, 5000);
                         } 
                     };
                 });
+            drones.append('<li id="clearli"></li>');
             $('li.drone').each(function(index) {
                 $(this).delay(100*index).fadeIn(500);
             });
         });
     };
+
+
+    //small helper function to show time from last statuscheck
     var statusCheckTime = function (time) {
         navistatus.text('last checked: ' + moment(time).fromNow()).fadeIn(500, function() {
             $(this).delay(7000).fadeOut(1500, function () {
@@ -160,28 +178,56 @@ $(function () {
         });
     };
 
-    // Things to run when the document is actually ready   
-    drones.sortable();
-    drones.disableSelection();
-    drones.fadeIn(1000);
+    var checkIfDragOrSort = function () {
+        if (dronesDrag === false) {
+            if (drones.hasClass('ui-sortable')) {
+                return;
+            } else {
+                if ($('li.drone').hasClass('ui-draggable')) {
+                    $('li.drone').draggable('destroy');
+                }
+                drones.sortable().disableSelection();
+                if (drones.hasClass('fullscreen')) {
+                    drones.toggleClass('fullscreen');
+                }
+            }
+        } else {
+            if (drones.hasClass('ui-sortable')) {
+                drones.sortable('destroy').toggleClass('fullscreen');
+            }
+            $('li.drone').draggable(); 
+        }
+    };
+
+
+    // Things to run when the document is actually ready
     navi.fadeIn(500);
     refreshstatus.hide();
     status.text('Loading').fadeOut(1000, function () {
         $(this).text('');
     });
-    statusCheckTime(Date.now());
     loadDrones();
 
 
     //jQuery-ui dialogs
     addapp.dialog({
         autoOpen: false,
-        width: 800,
-        height: 600,
+        width: 600,
+        height: 500,
         show: "drop",
-        hide: "fade"
+        hide: "fade",
+        buttons: {
+            "Add app": function() {
+                console.log({ name: newappname.val(), domain: newappdomain.val(), repo: newapprepo.val(), location: newapplocation.val(), scripts: newappscripts.val(), _csrf: csrf.val() });
+                /*$.post('/', { name: newappname.val(), domain: newappdomain.val(), repo: newapprepo.val(), location: newapplocation.val(), scripts: newappscripts.val(), _csrf: csrf.val() }, function (results) {
+                    console.log(results);
+                })*/
+            },
+            Cancel: function() {                
+                $( this ).dialog( "close" );
+            }
+        }
     });
-
 
     dronestatus.dialog({
         autoOpen: false,
@@ -273,6 +319,33 @@ $(function () {
         return false;
     });
 
+    sortEm.button({
+        icons: {
+            primary: "ui-icon-newwin"
+        },
+        text: false
+    }).click(function () {
+        if (dronesDrag === false) {
+            $(this).button({
+                icons: {
+                    primary: "ui-icon-grip-dotted-horizontal"
+                },
+                text: false
+            });
+            dronesDrag = true;
+        } else {
+            $(this).button({
+                icons: {
+                    primary: "ui-icon-newwin"
+                },
+                text: false
+            });             
+            dronesDrag = false;
+        }
+        checkIfDragOrSort();
+        return false;
+    });
+
     refreshall.button({
         icons: {
             primary: "ui-icon-refresh"
@@ -284,6 +357,7 @@ $(function () {
         statusCheckTime(getTime);
         return false;
     });
+
 
     drones.on('mousedown', 'li.drone', function () {
         $(this).toggleClass('grabbing');
@@ -303,9 +377,10 @@ $(function () {
 
     drones.on('click', 'a.dronelink', function() {
         var drone = $(this).text().toString();
-        clickDrone(drone);
+        droneJson(drone);
         return false;
     });
+
 
     //An interval function for autoreload etc.
     setInterval(function () {
