@@ -1,0 +1,29 @@
+{
+  "name": "Hachi",
+  "version": "0.0.1",
+  "description": "A web gui for haibu with user-management",
+  "homepage": "https://github.com/gildean/Hachi",
+  "author": "Olli Kankare <olli@salaliitto.com> (http://julkinen.salaliitto.com)",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gildean/Hachi"
+  },
+  "bugs": {
+    "url": "http://github.com/gildean/Hachi/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "bcrypt": "0.7.x",
+    "express": "3.0.x",
+    "jade": "0.27.x",
+    "connect-redis": "1.4.x",
+    "moment": "1.7.x",
+    "mongojs": "0.4.x",
+    "haibu-api": "0.9.x",
+    "bouncy": "0.3.x"
+  }
+}

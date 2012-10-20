@@ -18,16 +18,39 @@ block content
     #refreshstatus
     a#logout(href="/logout") logout
     ul#drones(style="display: none")
-    #settings
-      ul#users
-    #adduser
-      form(id="adduserform", action="/adduser", method="post")
+    ul#offlinedrones
+    #settings(style="display: none")
+      if (user.rw)
+        button#users list users
+        #userlist
+        #changeotheruser
+          form(id="changesomeotheruser", action="/edituser", method="post")
+            label(for="changepassword") New password
+            input.textinput(type="password", name="changepassword", id="changepassword")
+            label(for="chanepasswordconf") Confirm password
+            input.textinput(type="password", name="changepasswordconf", id="changepasswordconf")
+            label admin
+            input#makeadmin(name="makeadmin", type="checkbox")
+        #adduser
+          form(id="adduserform", action="/adduser", method="post")
+            label(for="newusername") Username
+            input.textinput(type="text", name="newusername", id="newusername")
+            label(for="newuserpass") Password
+            input.textinput(type="password", name="newuserpass", id="newuserpass")
+            label(for="newuserpassconf") Confirm password
+            input.textinput(type="password", name="newuserpassconf", id="newuserpassconf")
+            label admin
+            input#adminuser(name="adminuser", type="checkbox")
+      h3 change password
+      form(id="changepass", action="/edituser", method="post")
+        input(type="password", name="password")
+        input(type="password", name="passwordconf")
     #addapp(style="display: none")
-      form(id="adduserform", action="/addapp", method="post")
+      form(id="newappform", action="/addapp", method="post")
         label(for="name") App name
-        input(type="text", name="name", id="newappname")
+        input(type="text", name="name", id="newappname", placeholder="infonode")
         label(for="domain") App Domainname
-        input(type="text", name="domain", id="newappdomain")
+        input(type="text", name="domain", id="newappdomain", placeholder="node.local")
         label(for="repo") Repo Type
         select(name="repo", id="newapprepo")
           option(value="git", selected) git
@@ -35,8 +58,13 @@ block content
           option(value="tar") tar
           option(value="zip") zip
         label(for="location") Repo Location
-        input(type="text", name="location", id="newapplocation")
+        input(type="text", name="location", id="newapplocation", placeholder="https://github.com/gildean/InfoNode")
         label(for="scripts") Startup Scripts
-        input(type="text", name="scripts", id="newappscripts")
+        input(type="text", name="scripts", id="newappscripts", placeholder="server.js")
         input(type="hidden", name="_csrf", id="csrf", value="#{token}")
     #dronestatus
+      #dronestatuscontent
+block scripts
+  script(src="/js/queries.js")
+  if (user.rw)
+    script(src="/js/admin.js")

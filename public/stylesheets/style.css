@@ -49,7 +49,8 @@ h2 {
 
 .ui-dialog .ui-dialog-titlebar, .ui-dialog-title h2 {
 	margin: 0;
-	padding: 0 20px;
+	padding: 0 5px;
+	font-size: 110%;
 }
 
 .drone {
@@ -59,11 +60,11 @@ h2 {
 	border: 1px solid rgba(0,0,0,0.2);
 	padding: 10px 70px 10px 20px;
 	border-radius: 6px;
-	height: 260px;
+	height: 160px;
 	overflow: hidden;
 	width: 20%;
-	min-width: 250px;
-	max-width: 340px;
+	min-width: 230px;
+	max-width: 320px;
 	margin: 5px;
 	float: left;
 	color: #FFF;	
@@ -73,6 +74,42 @@ h2 {
   	cursor: -moz-grab;
   	cursor: -webkit-grab;
   	box-shadow: 2px 2px 8px rgba(0,0,0,0.3), inset 0 0 2px rgb(238,0,110);
+}
+
+.offlinedrone {
+	height: 40px;
+	font-size: 70%;
+	text-overflow: ellipsis;
+	border-radius: 6px;
+	padding: 0 0 0 10px;
+	list-style-type: none;
+	margin: 5px;
+	border: 1px solid rgba(0,0,0,0.2);
+	color: #FFF;	
+	background: #2B2B2B;
+	cursor: move;
+  	cursor: grab;
+  	cursor: -moz-grab;
+  	cursor: -webkit-grab;
+  	box-shadow: 2px 2px 8px rgba(0,0,0,0.3), inset 0 0 2px rgb(218,218,218);
+  	opacity: 0.4;
+  	transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+}
+
+.offlinedrone:hover {
+	opacity: 1;
+}
+
+.offlinedrone > a {
+	text-align: center;
+	display: inline-block;
+	padding: 5px;
+	white-space: nowrap;
+	font-size: 140%;
+	line-height: 160%;
 }
 
 .grabbing {
@@ -255,7 +292,7 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 
 .asidecontrol {
 	position: absolute;
-	top: 15px;
+	top: 5px;
 	right: 10px;
 	width: 50px;
 	font-size: 0.8em;
@@ -271,6 +308,16 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 .dronebutton {
 	padding: 4px 20px;
 	margin: 7px 0;
+}
+
+.right {
+	float: right;
+	margin: 5px 5px 0 0;
+}
+
+.left {
+	float: left;
+	margin: 5px 0 0 5px;
 }
 
 #nav {
@@ -293,10 +340,22 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 }
 
 #navstatus {
-	position: absolute;
-	margin: 18px 0 0;
-	width: 100%;
-	text-align: center;
+	position: fixed;
+	right: 0;
+	bottom: 60px;
+	display: block;
+	border-radius: 6px;
+	background: rgba(20,20,20,0.4);
+	box-shadow: 0 0 4px rgba(0,0,0,0.3);
+	margin: 0;
+	width: 250px;
+	padding: 10px;
+	text-align: center;	
+	min-height: 16px;
+	transition: height 0.2s linear;
+	-o-transition: height 0.2s linear;
+	-webkit-transition: height 0.2s linear;
+	-moz-transition: height 0.2s linear;
 }
 
 #navstatus p {
@@ -305,14 +364,28 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 	display: inline-block;
 }
 
-.drones {
+#drones {
+	display: inline-block;
 	margin: 20px auto 0;
 	padding: 0 1% 60px;
-	width: 90%;
+	width: 80%;
 	min-width: 360px;
 	max-width: 1800px;
 	overflow-y: auto;
 	text-shadow: -0 0 8px rgba(0,0,0,0.5), 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+#offlinedrones {
+	position: absolute;
+	right: 5px;
+	top: 20px;
+	display: inline-block;
+	margin: 0 auto;
+	padding: 0 1% 60px;
+	width: 16%;
+	min-width: 200px;
+	max-width: 400px;
+	overflow-y: auto;
 }
 
 .key {
@@ -329,6 +402,9 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 	font-size: 0.8em;
 	color: rgba(255,255,255,0.5);
 	text-align: center;
+}
+
+#dronestatus {
 }
 
 #refreshstatus {
@@ -373,6 +449,48 @@ div:hover > .tooltip, h1:hover > .tooltip, button:hover .dronetooltip {
 	width: 50%;
 	text-align: center;
 	margin: 10% auto 0;
+}
+
+#adduserform input, #changesomeotheruser input, #changepass input {
+	display: block;
+	margin: 2px 5px 6px;
+	padding: 3px;
+}
+
+#changepass input {
+	width: 90%;
+}
+
+.userlisttoprow > span {
+	display: inline-block;
+	background: #0e0e0e;
+	margin: 1px 5px;
+	padding: 2px 5px;
+}
+
+.userlistrow > span {
+	display: inline-block;
+	margin: 1px 5px;
+	padding: 2px 5px;
+	border: 1px solid rgba(255,255,255,0.5);
+}
+
+#userlist p {
+	width: 580px;
+	margin: 1px 0;
+	padding: 0;
+}
+
+.userlistuser {
+	width: 30%;
+}
+
+.userlistadmin {
+	width: 9%;
+}
+
+.userlistlastlogin {
+	width: 40%;
 }
 
 .textinput {
@@ -494,6 +612,7 @@ button {
 	padding: 4px;
 	margin: 4px auto;
 }
+
 #addapp select {
 	display: block;
 	width: 25%;
