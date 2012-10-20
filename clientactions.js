@@ -200,6 +200,7 @@ exports.startDrone = function (req, res) {
         if (!err && appDrone) {
             droneStart(appDrone, function (err, done) {
                 if (!err && done) {
+                    dronedb.ensureIndex({ name : 1, domain : 1, user : 1 });
                     dronedb.update({ name: appDrone.name }, { $set : { online : new Date() }, $inc : { running : 1 }, $push : { port: done.drone.port } }, function (err) {
                         if (!err) {
                             res.send(200, done);

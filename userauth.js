@@ -9,7 +9,6 @@ var init = (function () {
         if (!err && users !== 0) {
             return;
         } else if (users === 0) {
-            newInstall = true;
             var values = {
                 user: "admin",
                 pass: bcrypt.hashSync("admin", 8),
