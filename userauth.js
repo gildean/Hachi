@@ -64,9 +64,6 @@ exports.logon = function (req, res) {
                                 res.render('error', { error: err || 'Database error!' });
                             }
                         });
-                    } else if (err) {                  
-                        res.status(err.status || 500);
-                        res.render('error', { error: err || 'Database error!' });
                     } else {                  
                         res.status(401);
                         res.render('error', { error: 'loginerror' });

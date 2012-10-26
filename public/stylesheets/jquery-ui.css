@@ -56,9 +56,9 @@
 .ui-widget { font-family: Helvetica, Arial, sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Helvetica, Arial, sans-serif; font-size: 1em; }
-.ui-widget-content { box-shadow: 0 1px 8px rgba(0,0,0,0.4);border: 1px solid rgba(100,100,100,0.5); background: rgba(0,0,0,0.8); color: #ffffff; }
+.ui-widget-content { box-shadow: 0 1px 8px rgba(0,0,0,0.4);border: 1px solid rgba(100,100,100,0.5); background: rgba(0,0,0,0.9); color: #ffffff; }
 .ui-widget-content a { color: #ffffff; }
-.ui-widget-header { border: 1px solid rgba(10,10,10,0.5); background: rgba(60,60,60,0.5); color: #ffffff; font-weight: bold; }
+.ui-widget-header { border: 1px solid rgba(10,10,10,0.5); background: rgba(60,60,60,0.9); color: #ffffff; font-weight: bold; }
 .ui-widget-header a { color: #ffffff; }
 
 /* Interaction states
@@ -67,15 +67,15 @@
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #eeeeee; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #d50b51; box-shadow: 0 0 10px rgba(238,0,110,0.8); font-weight: normal; color: #ffffff; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #ffffff; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #f72689; background: #a50952 url(images/ui-bg_highlight-hard_20_a50952_1x100.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #f72689; background: #a50952 ; font-weight: normal; color: #ffffff; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff; text-decoration: none; }
 .ui-widget :active { outline: none; }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #cccccc; background: #eeeeee url(images/ui-bg_highlight-soft_80_eeeeee_1x100.png) 50% top repeat-x; color: #2e7db2; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #cccccc; background: #eeeeee; color: #2e7db2; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #2e7db2; }
-.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #ffb73d; background: #ffc73d url(images/ui-bg_glass_40_ffc73d_1x400.png) 50% 50% repeat-x; color: #111111; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #ffb73d; background: #ffc73d; color: #111111; }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a { color: #111111; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text { color: #111111; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
@@ -283,8 +283,8 @@ button:focus {border: 1px solid #EE006E}
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
 
 /* Overlays */
-.ui-widget-overlay { background: #5c5c5c url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .80;filter:Alpha(Opacity=80); }
-.ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .60;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*!
+.ui-widget-overlay { background: rgba(10,10,10,0.8); }
+.ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: rgba(0,0,0,0.5); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*!
  * jQuery UI Resizable 1.8.24
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)

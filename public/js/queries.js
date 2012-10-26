@@ -24,6 +24,7 @@ $(function () {
         offlineDrones = $('#offlinedrones'),
         dronelist = $('li.drone'),
         dronebutton = $('.dronebutton'),
+        dronemain = $('#dronemain'),
         navi = $('#nav'),
         navistatus = $('#navstatus'),
         dronestatus = $('#dronestatus'),
@@ -64,9 +65,9 @@ $(function () {
                       + '  <a class="dronelink" href="#">' + drone + '</a>\n'
                       + '  <div class="dronecount" id="dc' + drone + '">' + json.running + '<span class="tooltip">Drones running</span></div>\n'
                       + '  <aside class="asidecontrol" id="aside' + drone + '">\n'
-                      + '    <button class="dronebutton" value="' + drone + '">restart</button>\n'
-                      + '    <button class="dronebutton" value="' + drone + '">start</button>\n'
-                      + '    <button class="dronebutton" value="' + drone + '">stop</button>\n  </aside>\n'
+                      + '    <button class="droneactionbutton dronebutton" value="' + drone + '">restart</button>\n'
+                      + '    <button class="droneactionbutton dronebutton" value="' + drone + '">start</button>\n'
+                      + '    <button class="droneactionbutton dronebutton" value="' + drone + '">stop</button>\n  </aside>\n'
                       + '  <p><span class="key">Started</span>: <span class="value dronestarted">' + moment(online).fromNow() + '</span></p>'
                       + '  <p id="' + json.domain + 'domain"><span class="key">Domain</span>: <span class="value">' + json.domain + '</span></p>\n</li>\n';
             drones.append(droneItem);
@@ -91,8 +92,8 @@ $(function () {
         } else {
             droneItem = '<li style="display: none" class="offlinedrone fadedrone" id="' + drone + '">\n'
                       + '  <a class="dronelink" href="#">' + drone + '</a>\n'
-                      + '  <button class="offlinedronebutton right" value="' + drone + '">update</button>\n'
-                      + '  <button class="offlinedronebutton right" value="' + drone + '">delete</button></li>\n';
+                      + '  <button class="droneactionbutton offlinedronebutton right" value="' + drone + '">start</button>\n'
+                      + '  <button class="droneactionbutton offlinedronebutton right" value="' + drone + '">delete</button></li>\n';
             offlineDrones.append(droneItem);
             droneEl = $('#' + drone);
             droneEl.find('button:first')
@@ -152,17 +153,12 @@ $(function () {
                     };
                 } else {
                     repo = jsondata.repository;
-                    console.log(repo);
                     droneHtml += '<ul>\n  <p>Drone offline</p>\n'
                                + '  <li>name: ' + jsondata.name + '</li>'
                                + '  <li>domain: ' + jsondata.domain + '</li>';
                     for (key in repo) {
                         droneHtml += '  <li>' + key + ': ' + repo[key] + '</li>\n';
-                    }
-                    //droneHtml += '<ul>\n  <p>Drone offline</p>\n<li>name: ' + jsondata.name + '</li>\n<li>domain: ' + jsondata.domain + ̈́'</li>\n';
-                            //+ '  <li>repo-type: ' + repo.type + ̈́'</li>\n'
-                            //+ '  <li>repo-location: ' + repo.location + ̈́'</li>\n'
-                            //+ '  <li>scripts: ' + jsondata.scripts.start + ̈́'</li>\n</ul>\n'
+                    };
                     dronestatuscontent.append(droneHtml + '</ul>\n').fadeIn(300, function () {
                         $(this).toggleClass('hidden');
                     });
@@ -181,11 +177,11 @@ $(function () {
 
 
     doDrone = function (drone, action) {
-        var obj = {}, droneTime;
+        var obj = {},
+            droneTime;
         obj._csrf = csrf.val();
         obj[action] = { name : drone };
         $.post('/drone/' + drone + '/' + action, obj, function (res) {
-            console.log(res);
             if (action === 'stop' || action === 'delete') {
                 $('#' + drone).fadeOut(500, function () {
                     $(this).remove();
@@ -199,6 +195,11 @@ $(function () {
                     droneTime = res.drone.ctime;
                 } else if (res.ctime) {
                     droneTime = res.ctime;
+                }
+                if (action === 'start') {
+                    $('#' + drone).find('.dronecount').fadeOut(300, function () {
+                        $(this).text(parseInt($(this).text()) + 1).fadeIn(300);
+                    });
                 }
                 $('#' + drone).find('.dronestarted').fadeOut(300, function () {
                     $(this).text(moment(droneTime).fromNow()).fadeIn(300);
@@ -472,7 +473,7 @@ $(function () {
     });
 
 
-    drones.on('click', 'button.dronebutton', function () {
+    dronemain.on('click', 'button.droneactionbutton', function () {
         var action = $(this).text(),
             drone = $(this).val().toString();
         if (confirm('Is it ok to ' + action + ' drone named: ' + drone + ' (there is no undo)')) {
@@ -482,7 +483,7 @@ $(function () {
     });
 
 
-    drones.on('click', 'a.dronelink', function () {
+    dronemain.on('click', 'a.dronelink', function () {
         var drone = {
             name: $(this).text(),
             online: true
@@ -490,17 +491,6 @@ $(function () {
         droneJson(drone);
         return false;
     });
-
-    
-    offlineDrones.on('click', 'a.dronelink', function () {
-        var drone = {
-            name: $(this).text(),
-            online: false
-        };
-        droneJson(drone);
-        return false;
-    });
-
 
 
     /*

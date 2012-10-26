@@ -60,7 +60,7 @@ exports.restartDrone = function (req, res) {
             for (i = 0; i < results.length; i += 1) {
                 ports.push(results[i].port);
                 if (i === (results.length - 1)) {
-                    dronedb.update({ name: req.drone }, { $set : { online: new Date(), port: ports, running: results.length  } }, function (err) {
+                    dronedb.update({ name: req.drone }, { $set : { online: new Date(), port: ports, running: results.length } }, function (err) {
                         if (!err) {
                             res.send(200, results);
                         } else {
@@ -81,7 +81,7 @@ exports.updateDrone = function (req, res) {
         if (!err && getApp) {
             client.update(getApp, function (err, results) {
                 if (!err) {
-                    dronedb.update({ name: req.drone }, { $set : { online : new Date() } }, function (err) {
+                    dronedb.update({ name: req.drone }, { $set : { online : new Date(), running : 1, port : results.drone.port } }, function (err) {
                         if (!err) {
                             res.send(200, results);
                         } else {
@@ -126,21 +126,22 @@ function droneStart(appDrone, callback) {
     client.start(appDrone, function (err, results) {
         if (!err && results) {
             if (appDrone.ondb === true) {
-                callback(null, results);
+                callback(false, results);
             } else {
                 dronedb.insert(appDrone, function (dberr) {
                     if (!dberr) {
-                        callback(null, results);
+                        callback(false, results);
                     } else {
                         callback(err, results);
                     }
                 });
             }
         } else {
-            callback(err, null);
+            callback(err, false);
         }
     });
 };
+
 
 function droneToStart(req, callback) {
     var appDrone = {};
@@ -149,7 +150,7 @@ function droneToStart(req, callback) {
         if (!error && appresults) {
             appDrone = appresults;
             appDrone.ondb = true;
-            callback(null, appDrone);
+            callback(false, appDrone);
         } else if ((!error) && (!appresults)) {
             if (req.drone && req.body.domain && req.body.location && req.body.repo && req.body.scripts) {
                 dronedb.findOne({ domain: req.body.domain }, function (error, domresults) {
@@ -178,26 +179,24 @@ function droneToStart(req, callback) {
                                 appDrone.repository['url'] = 'https://github.com/gildean/InfoNode.git';
                             }
                         }
-                        callback(null, appDrone);
+                        callback(false, appDrone);
                     } else if (domresults) {
-                        res.send(400, { error: 'Domain already exists' });
-                        callback('Domain already exists', null);
+                        callback('Domain already exists', false);
                     } else {
-                        res.send(500, error);
-                        callback(error, null);
+                        callback(error, false);
                     }
                 });
             } else {
-                res.send(409, 'Insufficient data.');
-                callback('Insufficient data.', null);
+                callback('Insufficient data.', false);
             }
         }
     });
 };
 
+
 exports.startDrone = function (req, res) {
     droneToStart(req, function (err, appDrone) {
-        if (!err && appDrone) {
+        if (!err) {
             droneStart(appDrone, function (err, done) {
                 if (!err && done) {
                     dronedb.ensureIndex({ name : 1, domain : 1, user : 1 });
@@ -215,7 +214,7 @@ exports.startDrone = function (req, res) {
                 }
             });
         } else {
-            res.send(500, err || 'Error starting app.')
+            res.send(500, err)
         }
     });
 };
@@ -224,7 +223,7 @@ exports.startDrone = function (req, res) {
 exports.allDrones = function (req, res) {
     if (req.session.user.rw) {
         dronedb.find(function (err, results) {
-            if (!err) {
+            if (!err && results) {
                 res.send(200, results);
             } else {
                 res.send(500, err);
@@ -232,7 +231,7 @@ exports.allDrones = function (req, res) {
         });
     } else {
         dronedb.find({ user : req.session.user.user }, function (err, results) {
-            if (!err) {
+            if (!err && results) {
                 res.send(200, results);
             } else {
                 res.send(500, err);

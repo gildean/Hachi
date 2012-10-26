@@ -17,8 +17,9 @@ block content
     #statusmessage
     #refreshstatus
     a#logout(href="/logout") logout
-    ul#drones(style="display: none")
-    ul#offlinedrones
+    #dronemain
+      ul#drones(style="display: none")
+      ul#offlinedrones
     #settings(style="display: none")
       if (user.rw)
         button#users list users
